@@ -5,17 +5,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import {
   LoaderFunction,
   Outlet,
-  redirect,
   useLoaderData,
   useLocation,
 } from "react-router-dom";
 import Navigation from "./Navigation";
 import { LoaderData } from "../types/LoaderData";
-
-export const action = async () => {
-  sessionStorage.removeItem("user");
-  return redirect("login");
-};
 
 export const loader = (() => {
   const storageUser = sessionStorage.getItem("user");

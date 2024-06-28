@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Box, Typography, Button } from "@mui/material";
-import { Link, Form } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navigation = ({ user }: { user: { [key: string]: string } | null }) => (
   <AppBar position="static">
@@ -14,14 +14,7 @@ const Navigation = ({ user }: { user: { [key: string]: string } | null }) => (
       </Box>
 
       {user ? (
-        <>
-          <Typography>Вы вошли как {user.name}</Typography>
-          <Form method="POST">
-            <Button type="submit" sx={{ ml: 1 }} variant="contained">
-              Выйти
-            </Button>
-          </Form>
-        </>
+        <Typography>Вы вошли как {user.name}</Typography>
       ) : (
         <Button component={Link} to="/login" color="inherit">
           Войти

@@ -11,7 +11,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Form, useLoaderData, useNavigation } from "react-router-dom";
+import {
+  Form,
+  useLoaderData,
+  useLocation,
+  useNavigation,
+} from "react-router-dom";
 import { LoaderFunction } from "react-router-dom";
 import { LoaderData } from "../types/LoaderData";
 
@@ -19,16 +24,16 @@ export const loader = (async ({ request }) => {
   const url = new URL(request.url);
   const id = url.searchParams.get("id") || "";
   const res = await fetch(`api/devices${id && "?id=" + id}`);
+  if (!res.ok) throw Error(await res.text());
   const devices = (await res.json()) as { [key: string]: any }[];
   return { devices };
 }) satisfies LoaderFunction;
 
 const Devices = () => {
   const { devices } = useLoaderData() as LoaderData<typeof loader>;
-  const navigation = useNavigation();
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("id");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
   return (
     <Container sx={{ my: 4 }}>
       <Paper elevation={1} sx={{ p: 4 }}>
@@ -37,18 +42,19 @@ const Devices = () => {
           <Form role="search">
             <Box display="flex" gap={2}>
               <TextField
-                type="search"
+                defaultValue={searchParams.get("id")}
+                type="number"
                 name="id"
                 size="small"
                 label="Поиск по id"
               />
-              <Button disabled={searching} type="submit" variant="contained">
+              <Button type="submit" variant="contained">
                 Искать
               </Button>
             </Box>
           </Form>
         </Box>
-        <Box maxWidth={1} overflow="scroll" mt={2}>
+        <Box maxWidth={1} sx={{ overflowX: "auto" }} mt={2}>
           <Table>
             <TableHead>
               <TableRow>
