@@ -26,7 +26,7 @@ export const action = async ({ request }: { request: Request }) => {
   data.append("email", email);
   data.append("password", password);
 
-  const res = await fetch("https://gps.autotracker.group/api/session", {
+  const res = await fetch("api/session", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: data,
@@ -79,6 +79,7 @@ const Login = () => {
               label="Пароль"
               defaultValue={123321}
             />
+            {!!error && <Alert severity="error">{errorMessage}</Alert>}
             <Button
               type="submit"
               variant="contained"
@@ -86,7 +87,6 @@ const Login = () => {
             >
               Войти
             </Button>
-            {!!error && <Alert severity="error">{errorMessage}</Alert>}
           </Box>
         </Form>
       </Paper>

@@ -18,7 +18,7 @@ import { LoaderData } from "../types/LoaderData";
 export const loader = (async ({ request }) => {
   const url = new URL(request.url);
   const id = url.searchParams.get("id") || "";
-  const res = await fetch(import.meta.env.VITE_DEVICES_URL + "?id=" + id);
+  const res = await fetch(`api/devices${id && "?id=" + id}`);
   const devices = (await res.json()) as { [key: string]: any }[];
   return { devices };
 }) satisfies LoaderFunction;
@@ -48,30 +48,32 @@ const Devices = () => {
             </Box>
           </Form>
         </Box>
-        <Table sx={{ mt: 2 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>name</TableCell>
-              <TableCell>uniqueId</TableCell>
-              <TableCell>status</TableCell>
-              <TableCell>lastUpdate</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {devices.map((el) => (
-              <TableRow key={el.uniqueId}>
-                <TableCell>{el.id}</TableCell>
-                <TableCell>{el.name}</TableCell>
-                <TableCell>{el.uniqueId}</TableCell>
-                <TableCell>{el.status}</TableCell>
-                <TableCell>
-                  {new Date(el.lastUpdate).toLocaleString()}
-                </TableCell>
+        <Box maxWidth={1} overflow="scroll" mt={2}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>id</TableCell>
+                <TableCell>name</TableCell>
+                <TableCell>uniqueId</TableCell>
+                <TableCell>status</TableCell>
+                <TableCell>lastUpdate</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {devices.map((el) => (
+                <TableRow key={el.uniqueId}>
+                  <TableCell>{el.id}</TableCell>
+                  <TableCell>{el.name}</TableCell>
+                  <TableCell>{el.uniqueId}</TableCell>
+                  <TableCell>{el.status}</TableCell>
+                  <TableCell>
+                    {new Date(el.lastUpdate).toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
       </Paper>
     </Container>
   );
