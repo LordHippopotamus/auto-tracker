@@ -44,7 +44,7 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 const Login = () => {
-  const error = useRouteError();
+  const error = useRouteError() as any;
   let errorMessage = "";
 
   switch (error?.message) {

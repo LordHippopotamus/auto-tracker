@@ -19,7 +19,7 @@ export const loader = (async ({ request }) => {
   const url = new URL(request.url);
   const id = url.searchParams.get("id") || "";
   const res = await fetch(import.meta.env.VITE_DEVICES_URL + "?id=" + id);
-  const devices = await res.json();
+  const devices = (await res.json()) as { [key: string]: any }[];
   return { devices };
 }) satisfies LoaderFunction;
 
